@@ -24,3 +24,105 @@ Ensure that Nginx and systemd are installed on your server. If not, install them
 ```bash
 sudo pacman -S nginx
 
+## Step 2: Place Files in the Correct Locations
+
+### 2.1 Copy the Script
+Place the `generate_index` script in `/var/lib/webgen/bin/` and set executable permissions:
+```bash
+sudo mkdir -p /var/lib/webgen/bin
+sudo cp generate_index /var/lib/webgen/bin/
+sudo chmod +x /var/lib/webgen/bin/generate_index
+
+
+2.2 Copy the Systemd Files
+Place the service and timer files in /etc/systemd/system/:
+
+bash
+Copy code
+sudo cp generate-index.service /etc/systemd/system/
+sudo cp generate-index.timer /etc/systemd/system/
+2.3 Reload systemd and Enable the Timer
+Reload systemd, enable the timer, and start it:
+
+bash
+Copy code
+sudo systemctl daemon-reload
+sudo systemctl enable generate-index.timer
+sudo systemctl start generate-index.timer
+Step 3: Configure Nginx
+3.1 Copy the Server Block File
+Place the server-block file in /etc/nginx/sites-available/:
+
+bash
+Copy code
+sudo cp server-block /etc/nginx/sites-available/webgen
+3.2 Enable the Server Block
+Create a symbolic link to enable the server block:
+
+bash
+Copy code
+sudo ln -s /etc/nginx/sites-available/webgen /etc/nginx/sites-enabled/webgen
+3.3 Update the Nginx Configuration
+Ensure your nginx.conf includes the following line in the http block:
+
+nginx
+Copy code
+include /etc/nginx/sites-enabled/*;
+3.4 Restart Nginx
+Test and restart Nginx to apply changes:
+
+bash
+Copy code
+sudo nginx -t
+sudo systemctl restart nginx
+Step 4: Verify the Setup
+Open your browser and visit:
+arduino
+Copy code
+http://143.198.227.232
+You should see a page displaying the following system information:
+Kernel Release
+Operating System
+Date
+Number of Installed Packages
+Step 5: Additional Notes
+If you make changes to the script or server configuration, restart the necessary services:
+
+bash
+Copy code
+sudo systemctl restart generate-index.service
+sudo systemctl restart nginx
+Ensure the /var/lib/webgen/HTML directory is writable by the webgen user:
+
+bash
+Copy code
+sudo chown -R webgen:webgen /var/lib/webgen
+sudo chmod -R 755 /var/lib/webgen
+Deliverables
+GitHub Repository
+Link to Repository
+IP Address
+http://143.198.227.232
+Screenshot
+The final success screenshot is located in the screenshots folder as success.png.
+Step 6: How to Add This README to Your Repository
+Open README.md in nvim:
+
+bash
+Copy code
+nvim README.md
+Paste the above content.
+
+Save and exit:
+
+bash
+Copy code
+:wq
+Commit and push the changes:
+
+bash
+Copy code
+git add README.md
+git commit -m "Updated README with detailed steps"
+git push origin main
+
