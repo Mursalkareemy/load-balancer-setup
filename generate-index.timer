@@ -1,0 +1,15 @@
+[Unit]
+# Description of the timer
+Description=Run generate-index.service daily at 05:00
+
+[Timer]
+# Schedule the service to run daily at 5:00 AM
+OnCalendar=*-*-* 05:00:00
+
+# Ensures the timer will catch up on missed events if the system was off
+Persistent=true
+
+[Install]
+# Enable the timer to run with other system timers
+WantedBy=timers.target
+
