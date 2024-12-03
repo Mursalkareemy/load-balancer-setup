@@ -1,0 +1,18 @@
+# Server block configuration for webgen
+server {
+    listen 80; # Listen on port 80 for HTTP requests
+    
+    server_name 143.198.227.232; # Your server's public IP address
+
+    # Specify the root directory for the web server
+    root /var/lib/webgen/HTML;
+
+    # Default file to serve
+    index index.html;
+
+    # Handle requests to the root URL
+    location / {
+        try_files $uri $uri/ =404; # Serve the requested file, or return a 404 error if not found
+    }
+}
+
